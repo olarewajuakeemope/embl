@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.75), 
+    rgba(255, 255, 255, 0.75)
+    ),
+    url('./science.jpg');
+  background-size:cover;
+  height: 1080px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  margin-top: 5em;
+  color: rgb(117, 170, 81);
+}
+
+.App-intro {
+  font-size: large;
+  padding-left: 15em;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
