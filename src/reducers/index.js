@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import manageTransactions from './transactions';
+import managePublications from './publications';
 
 const rootReducer = combineReducers({
   // Add all reducers here
-  manageTransactions,
+  managePublications,
 });
 
 export default rootReducer;

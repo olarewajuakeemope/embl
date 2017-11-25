@@ -6,7 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { Provider } from 'react-redux';
 
-import './index.css';
+import './resources/styles/index.css';
 import App from './App';
 import configureStore from './store/configureStore';
 

@@ -12,7 +12,7 @@
     rgba(255, 255, 255, 0.75), 
     rgba(255, 255, 255, 0.75)
     ),
-    url('./science.jpg');
+    url('../img/science.jpg');
   background-size:cover;
   height: 1080px;
   padding: 20px;
@@ -27,7 +27,8 @@
 
 .App-intro {
   font-size: large;
-  padding-left: 15em;
+  padding-left: 30%;
+  margin-top: 5em;
 }
 
 ul {
@@ -39,6 +40,20 @@ ul {
 
 li {
   float: left;
+}
+
+.date, .search-text {
+  margin-right: 1em;
+}
+
+div.date div {
+  width: 120px !important;
+}
+
+.error {
+  margin-top: -5px;
+  font-size: small;
+  color: red;
 }
 
 @keyframes App-logo-spin {
