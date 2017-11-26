@@ -61,19 +61,39 @@ function getPublications(dispatch, date, term) {
 async function processQuery(dispatch, data) {
   const { term, startDate, endDate } = data;
   const publications = [];
+  let fetchedPubs;
+  let date;
 
   const endYear = endDate.getFullYear();
   let startYear = startDate.getFullYear();
 
   if (startYear === endYear) {
-    const date = processDate(startDate, endDate);
+    date = processDate(startDate, endDate);
+    fetchedPubs = await getPublications(dispatch, date, term);
+
+    // confirm hitcount occurs else pass custom data
+    if (fetchedPubs.hitCount === 0) {
+      fetchedPubs = {
+        hitCount: 0,
+        date: endDate.getFullYear(),
+      };
+    }
 
     // make single request if date query is within same year
-    publications.push(await getPublications(dispatch, date, term));
+    publications.push(fetchedPubs);
   } else {
     // fetch publications from start date till end of the same year
-    let date = processDate(startDate, new Date(startYear, 11, 32));
-    publications.push(await getPublications(dispatch, date, term));
+    date = processDate(startDate, new Date(startYear, 11, 32));
+    fetchedPubs = await getPublications(dispatch, date, term);
+
+    // confirm hitcount occurs else pass custom data
+    if (fetchedPubs.hitCount === 0) {
+      fetchedPubs = {
+        hitCount: 0,
+        date: date.substring(0, 4),
+      };
+    }
+    publications.push(fetchedPubs);
 
     // begin fetching for subsequent years
     startYear += 1;
@@ -81,11 +101,29 @@ async function processQuery(dispatch, data) {
       if (startYear === endYear) {
         // fetch from begin of endDate year till endDate and end loop
         date = processDate(new Date(startYear, 0, 2), endDate);
-        publications.push(await getPublications(dispatch, date, term));
+        fetchedPubs = await getPublications(dispatch, date, term);
+
+        // confirm hitcount occurs else pass custom data
+        if (fetchedPubs.hitCount === 0) {
+          fetchedPubs = {
+            hitCount: 0,
+            date: date.substring(0, 4),
+          };
+        }
+        publications.push(fetchedPubs);
       } else {
         // fetch from begin of year till end of the same year
         date = processDate(new Date(startYear, 0, 2), new Date(startYear, 11, 32));
-        publications.push(await getPublications(dispatch, date, term));
+        fetchedPubs = await getPublications(dispatch, date, term);
+
+        // confirm hitcount occurs else pass custom data
+        if (fetchedPubs.hitCount === 0) {
+          fetchedPubs = {
+            hitCount: 0,
+            date: date.substring(0, 4),
+          };
+        }
+        publications.push(fetchedPubs);
       }
       startYear += 1;
     }
@@ -98,6 +136,14 @@ async function processQuery(dispatch, data) {
 function fetching() {
   return {
     type: types.FETCHING_PUBLICATIONS,
+  };
+}
+
+// notifies application of entered search query
+function setSearchQuery(query) {
+  return {
+    type: types.SET_QUERY,
+    data: query,
   };
 }
 
@@ -116,6 +162,8 @@ async function fetchPublications(dispatch, body) {
 
   // pass fetched publications to application if no axios error occured
   if (publications[0] !== undefined) {
+    const { term, startDate, endDate } = body;
+    await dispatch(setSearchQuery({ term, startDate, endDate }));
     await dispatch(fetchedPublications(publications));
   }
 }

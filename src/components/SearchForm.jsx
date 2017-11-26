@@ -4,6 +4,7 @@ import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import logo from '../resources/img/logo.png';
 import dataValidators from '../utils/dataValidators';
 import actions from '../actions/userActions';
 
@@ -110,7 +111,7 @@ class SearchForm extends Component {
   }
 
   render() {
-    const { pClass } = this.props;
+    const { pClass, isNavbar } = this.props;
     const {
       errors,
       loading,
@@ -122,12 +123,27 @@ class SearchForm extends Component {
 
     const startDateError = errors.startDate ? <p className="error text-danger">{errors.startDate}</p> : '';
     const endDateError = errors.endDate ? <p className="error text-danger">{errors.endDate}</p> : '';
+    const appLogo = <img src={logo} className="App-logo navbar-logo" alt="logo" />;
+    const submitButton = (
+      <div>
+        <RaisedButton
+          disabled={loading}
+          label={loadingText}
+          onClick={this.submitForm}
+          backgroundColor="rgb(117, 170, 81)"
+          labelStyle={{ color: 'white' }}
+        />
+      </div>
+    );
 
     return (
       <div>
         <p className={pClass}>
-          <ul>
-            <li>
+          <ul className={isNavbar && 'navbar'}>
+            <li className={isNavbar && 'nav-logo'}>
+              {isNavbar && appLogo}
+            </li>
+            <li className={isNavbar && 'form-item'}>
               <div className="search-text">
                 <TextField
                   hintText="Enter search term"
@@ -138,7 +154,7 @@ class SearchForm extends Component {
                 />
               </div>
             </li>
-            <li>
+            <li className={isNavbar && 'form-item'}>
               <div className="date">
                 <DatePicker
                   name="startDate"
@@ -150,7 +166,7 @@ class SearchForm extends Component {
                 {startDateError}
               </div>
             </li>
-            <li>
+            <li className={isNavbar && 'form-item'}>
               <div className="date">
                 <DatePicker
                   name="endDate"
@@ -162,18 +178,13 @@ class SearchForm extends Component {
                 {endDateError}
               </div>
             </li>
+            <li className={isNavbar && 'form-item submit'}>
+              {isNavbar && submitButton}
+            </li>
           </ul>
           <br />
         </p>
-        <div>
-          <RaisedButton
-            disabled={loading}
-            label={loadingText}
-            onClick={this.submitForm}
-            backgroundColor="rgb(117, 170, 81)"
-            labelStyle={{ color: 'white' }}
-          />
-        </div>
+        {!isNavbar && submitButton}
       </div>
     );
   }
@@ -181,11 +192,13 @@ class SearchForm extends Component {
 
 SearchForm.defaultProps = {
   pClass: '',
+  isNavbar: false,
 };
 
 SearchForm.propTypes = {
   pClass: PropTypes.string,
   fetchError: PropTypes.string.isRequired,
+  isNavbar: PropTypes.bool,
 };
 
 function select(store) {

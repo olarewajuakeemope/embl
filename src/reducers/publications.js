@@ -4,6 +4,7 @@ const initialState = {
   publications: [],
   error: '',
   fetching: false,
+  query: {},
 };
 
 function publications(state = initialState, action) {
@@ -13,6 +14,10 @@ function publications(state = initialState, action) {
 
   if (action.type === types.FETCHED_PUBLICATIONS) {
     return { ...state, publications: action.data };
+  }
+
+  if (action.type === types.SET_QUERY) {
+    return { ...state, query: action.data };
   }
 
   if (action.type === types.CLEAR_ERROR) {
