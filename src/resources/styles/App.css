@@ -10,7 +10,19 @@
 .navbar-logo {
   height: 40px;
   margin-left: 10px;
-  margin-right: 700px;
+}
+
+.embl-item {
+  margin-right: 600px;
+}
+
+.embl-text {
+  color: rgb(117, 170, 81);
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: larger;
+  position: relative;
+  top: -10px;
 }
 
 .App-header {

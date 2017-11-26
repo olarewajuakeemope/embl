@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import logo from '../resources/img/logo.png';
@@ -15,6 +16,8 @@ const INITIAL_STATE = {
   startDate: null,
   endDate: null,
   errors: {},
+  openSnackbar: false,
+  fetchError: '',
 };
 
 /**
@@ -91,10 +94,11 @@ class SearchForm extends Component {
       if (!fetching && !fetchError) {
         this.resetState();
       } else if (!fetching && fetchError) {
-        window.alert(fetchError);
         this.setState({
           loading: false,
           loadingText: 'Search',
+          openSnackbar: true,
+          fetchError,
         });
       }
     } else {
@@ -105,6 +109,13 @@ class SearchForm extends Component {
       });
     }
   }
+
+
+  handleRequestClose = () => {
+    this.setState({
+      openSnackbar: false,
+    });
+  };
 
   resetState = () => {
     this.setState(INITIAL_STATE);
@@ -119,11 +130,17 @@ class SearchForm extends Component {
       startDate,
       endDate,
       term,
+      openSnackbar,
+      fetchError,
     } = this.state;
 
     const startDateError = errors.startDate ? <p className="error text-danger">{errors.startDate}</p> : '';
     const endDateError = errors.endDate ? <p className="error text-danger">{errors.endDate}</p> : '';
-    const appLogo = <img src={logo} className="App-logo navbar-logo" alt="logo" />;
+    const appLogo = (
+      <span className="embl-item">
+        <img src={logo} className="App-logo navbar-logo" alt="logo" />
+        <span className="embl-text">EMBL</span>
+      </span>);
     const submitButton = (
       <div>
         <RaisedButton
@@ -139,6 +156,12 @@ class SearchForm extends Component {
     return (
       <div>
         <p className={pClass}>
+          <Snackbar
+            open={openSnackbar}
+            message={fetchError}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
           <ul className={isNavbar && 'navbar'}>
             <li className={isNavbar && 'nav-logo'}>
               {isNavbar && appLogo}

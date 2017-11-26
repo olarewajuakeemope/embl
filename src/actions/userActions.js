@@ -6,7 +6,7 @@ const BASE_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=
 const MIDDLE_URL = '")+AND+(FIRST_PDATE:[';
 const TRAILING_URL = '])&format=json&cursorMark=*&pageSize=1&sort=CITED%20desc';
 
-const NETWORK_ERROR_MESSAGE = 'Request failed with status code 404';
+const NETWORK_ERROR_MESSAGE = 'Network Error';
 const NETWORK_ERROR_RESPONSE = 'Check your network connection';
 
 // passes fetched publications to application
@@ -72,7 +72,7 @@ async function processQuery(dispatch, data) {
     fetchedPubs = await getPublications(dispatch, date, term);
 
     // confirm hitcount occurs else pass custom data
-    if (fetchedPubs.hitCount === 0) {
+    if (fetchedPubs && fetchedPubs.hitCount === 0) {
       fetchedPubs = {
         hitCount: 0,
         date: endDate.getFullYear(),
@@ -87,7 +87,7 @@ async function processQuery(dispatch, data) {
     fetchedPubs = await getPublications(dispatch, date, term);
 
     // confirm hitcount occurs else pass custom data
-    if (fetchedPubs.hitCount === 0) {
+    if (fetchedPubs && fetchedPubs.hitCount === 0) {
       fetchedPubs = {
         hitCount: 0,
         date: date.substring(0, 4),
@@ -104,7 +104,7 @@ async function processQuery(dispatch, data) {
         fetchedPubs = await getPublications(dispatch, date, term);
 
         // confirm hitcount occurs else pass custom data
-        if (fetchedPubs.hitCount === 0) {
+        if (fetchedPubs && fetchedPubs.hitCount === 0) {
           fetchedPubs = {
             hitCount: 0,
             date: date.substring(0, 4),
@@ -117,7 +117,7 @@ async function processQuery(dispatch, data) {
         fetchedPubs = await getPublications(dispatch, date, term);
 
         // confirm hitcount occurs else pass custom data
-        if (fetchedPubs.hitCount === 0) {
+        if (fetchedPubs && fetchedPubs.hitCount === 0) {
           fetchedPubs = {
             hitCount: 0,
             date: date.substring(0, 4),
