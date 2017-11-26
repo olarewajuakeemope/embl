@@ -1,5 +1,5 @@
-# EMBL CHART
-EMBL CHART is an appkication used to get statistics on EMBL publications content
+# EMBL PUBLICATION STATISTICS
+EMBL PUBLICATIONS STATISTICS is an appkication used to get statistics on EMBL publications content
 
 ## FEATURES
 
