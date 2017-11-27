@@ -57,6 +57,21 @@ function getPublications(dispatch, date, term) {
     });
 }
 
+// handle empty response and assign date
+function handleAxiosResponse(fetchedPubs, date) {
+  let axiosRes = fetchedPubs;
+  if (axiosRes && axiosRes.hitCount === 0) {
+    axiosRes = {
+      hitCount: 0,
+      date: date.substring(0, 4),
+    };
+  } else {
+    // assign request year to fetched data
+    axiosRes.date = date.substring(0, 4);
+  }
+  return axiosRes;
+}
+
 // compose publications fetch based on date range
 async function processQuery(dispatch, data) {
   const { term, startDate, endDate } = data;
@@ -89,16 +104,8 @@ async function processQuery(dispatch, data) {
     date = processDate(startDate, new Date(startYear, 11, 32));
     fetchedPubs = await getPublications(dispatch, date, term);
 
-    // confirm hitcount occurs else pass custom data
-    if (fetchedPubs && fetchedPubs.hitCount === 0) {
-      fetchedPubs = {
-        hitCount: 0,
-        date: date.substring(0, 4),
-      };
-    } else {
-      // assign request year to fetched data
-      fetchedPubs.date = date.substring(0, 4);
-    }
+    // handle empty response and assign date
+    fetchedPubs = handleAxiosResponse(fetchedPubs, date);
     publications.push(fetchedPubs);
 
     // begin fetching for subsequent years
@@ -109,32 +116,16 @@ async function processQuery(dispatch, data) {
         date = processDate(new Date(startYear, 0, 2), endDate);
         fetchedPubs = await getPublications(dispatch, date, term);
 
-        // confirm hitcount occurs else pass custom data
-        if (fetchedPubs && fetchedPubs.hitCount === 0) {
-          fetchedPubs = {
-            hitCount: 0,
-            date: date.substring(0, 4),
-          };
-        } else {
-          // assign request year to fetched data
-          fetchedPubs.date = date.substring(0, 4);
-        }
+        // handle empty response and assign date
+        fetchedPubs = handleAxiosResponse(fetchedPubs, date);
         publications.push(fetchedPubs);
       } else {
         // fetch from begin of year till end of the same year
         date = processDate(new Date(startYear, 0, 2), new Date(startYear, 11, 32));
         fetchedPubs = await getPublications(dispatch, date, term);
 
-        // confirm hitcount occurs else pass custom data
-        if (fetchedPubs && fetchedPubs.hitCount === 0) {
-          fetchedPubs = {
-            hitCount: 0,
-            date: date.substring(0, 4),
-          };
-        } else {
-          // assign request year to fetched data
-          fetchedPubs.date = date.substring(0, 4);
-        }
+        // handle empty response and assign date
+        fetchedPubs = handleAxiosResponse(fetchedPubs, date);
         publications.push(fetchedPubs);
       }
       startYear += 1;
