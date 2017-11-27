@@ -63,12 +63,10 @@ function handleAxiosResponse(fetchedPubs, date) {
   if (axiosRes && axiosRes.hitCount === 0) {
     axiosRes = {
       hitCount: 0,
-      date: date.substring(0, 4),
     };
-  } else {
-    // assign request year to fetched data
-    axiosRes.date = date.substring(0, 4);
   }
+  // assign request year to fetched data
+  axiosRes.date = date.substring(0, 4);
   return axiosRes;
 }
 
