@@ -24,14 +24,14 @@ class Chart extends Component {
     const { term, startDate, endDate } = query;
 
     const chartData = publications.map((item) => {
-      const { hitCount, resultList } = item;
+      const { hitCount, resultList, date } = item;
       if (hitCount === 0) {
         return {
           hitCount: 0,
           source: 'N/A',
           title: 'N/A',
           journalTitle: 'N/A',
-          pubYear: item.date,
+          pubYear: date,
           firstPublicationDate: 'N/A',
           citedByCount: 0,
         };
@@ -42,7 +42,6 @@ class Chart extends Component {
         source,
         title,
         journalTitle,
-        pubYear,
         firstPublicationDate,
         citedByCount,
       } = publication;
@@ -52,7 +51,7 @@ class Chart extends Component {
         source,
         title,
         journalTitle,
-        pubYear,
+        pubYear: date,
         firstPublicationDate,
         citedByCount,
       };

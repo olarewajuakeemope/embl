@@ -77,6 +77,9 @@ async function processQuery(dispatch, data) {
         hitCount: 0,
         date: endDate.getFullYear(),
       };
+    } else {
+      // assign request year to fetched data
+      fetchedPubs.date = endDate.getFullYear();
     }
 
     // make single request if date query is within same year
@@ -92,6 +95,9 @@ async function processQuery(dispatch, data) {
         hitCount: 0,
         date: date.substring(0, 4),
       };
+    } else {
+      // assign request year to fetched data
+      fetchedPubs.date = date.substring(0, 4);
     }
     publications.push(fetchedPubs);
 
@@ -109,6 +115,9 @@ async function processQuery(dispatch, data) {
             hitCount: 0,
             date: date.substring(0, 4),
           };
+        } else {
+          // assign request year to fetched data
+          fetchedPubs.date = date.substring(0, 4);
         }
         publications.push(fetchedPubs);
       } else {
@@ -122,6 +131,9 @@ async function processQuery(dispatch, data) {
             hitCount: 0,
             date: date.substring(0, 4),
           };
+        } else {
+          // assign request year to fetched data
+          fetchedPubs.date = date.substring(0, 4);
         }
         publications.push(fetchedPubs);
       }
