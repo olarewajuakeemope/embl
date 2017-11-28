@@ -43,6 +43,13 @@ function clearError() {
   };
 }
 
+// notifies application when beginning or ending fetching state
+function fetching() {
+  return {
+    type: types.FETCHING_PUBLICATIONS,
+  };
+}
+
 // makes axios request for publications to remote API
 function getPublications(dispatch, date, term) {
   const url = `${BASE_URL}${term}${MIDDLE_URL}${date}${TRAILING_URL}`;
@@ -54,26 +61,29 @@ function getPublications(dispatch, date, term) {
         NETWORK_ERROR_RESPONSE :
         err.message;
       dispatch(fetchError(errorText));
+      return false;
     });
 }
 
 // handle empty response and assign date
 function handleAxiosResponse(fetchedPubs, date) {
   let axiosRes = fetchedPubs;
-  if (axiosRes && axiosRes.hitCount === 0) {
-    axiosRes = {
-      hitCount: 0,
-    };
+  if (axiosRes) {
+    if (axiosRes.hitCount === 0) {
+      axiosRes = {
+        hitCount: 0,
+      };
+    }
+    // assign request year to fetched data
+    axiosRes.date = date.substring(0, 4);
   }
-  // assign request year to fetched data
-  axiosRes.date = date.substring(0, 4);
   return axiosRes;
 }
 
 // compose publications fetch based on date range
 async function processQuery(dispatch, data) {
   const { term, startDate, endDate } = data;
-  const publications = [];
+  let publications = [];
   let fetchedPubs;
   let date;
 
@@ -95,16 +105,26 @@ async function processQuery(dispatch, data) {
       fetchedPubs.date = endDate.getFullYear();
     }
 
-    // make single request if date query is within same year
-    publications.push(fetchedPubs);
+    // push to publications only if no error occurred
+    if (!fetchedPubs) {
+      publications = [];
+    } else {
+      // make single request if date query is within same year
+      publications.push(fetchedPubs);
+    }
   } else {
     // fetch publications from start date till end of the same year
     date = processDate(startDate, new Date(startYear, 11, 32));
     fetchedPubs = await getPublications(dispatch, date, term);
 
-    // handle empty response and assign date
-    fetchedPubs = handleAxiosResponse(fetchedPubs, date);
-    publications.push(fetchedPubs);
+    // push to publications only if no error occurred
+    if (!fetchedPubs) {
+      publications = [];
+    } else {
+      // handle empty response and assign date
+      fetchedPubs = handleAxiosResponse(fetchedPubs, date);
+      publications.push(fetchedPubs);
+    }
 
     // begin fetching for subsequent years
     startYear += 1;
@@ -114,30 +134,34 @@ async function processQuery(dispatch, data) {
         date = processDate(new Date(startYear, 0, 2), endDate);
         fetchedPubs = await getPublications(dispatch, date, term);
 
-        // handle empty response and assign date
-        fetchedPubs = handleAxiosResponse(fetchedPubs, date);
-        publications.push(fetchedPubs);
+        // push to publications only if no error occurred
+        if (!fetchedPubs) {
+          publications = [];
+        } else {
+          // handle empty response and assign date
+          fetchedPubs = handleAxiosResponse(fetchedPubs, date);
+          publications.push(fetchedPubs);
+        }
       } else {
         // fetch from begin of year till end of the same year
         date = processDate(new Date(startYear, 0, 2), new Date(startYear, 11, 32));
         fetchedPubs = await getPublications(dispatch, date, term);
 
-        // handle empty response and assign date
-        fetchedPubs = handleAxiosResponse(fetchedPubs, date);
-        publications.push(fetchedPubs);
+        // push to publications only if no error occurred
+        if (!fetchedPubs) {
+          publications = [];
+          break;
+        } else {
+          // handle empty response and assign date
+          fetchedPubs = handleAxiosResponse(fetchedPubs, date);
+          publications.push(fetchedPubs);
+        }
       }
       startYear += 1;
     }
   }
 
   return publications;
-}
-
-// notifies application when beginning or ending fetching state
-function fetching() {
-  return {
-    type: types.FETCHING_PUBLICATIONS,
-  };
 }
 
 // notifies application of entered search query
@@ -162,7 +186,7 @@ async function fetchPublications(dispatch, body) {
   await dispatch(fetching());
 
   // pass fetched publications to application if no axios error occured
-  if (publications[0] !== undefined) {
+  if (publications.length !== 0) {
     const { term, startDate, endDate } = body;
     await dispatch(setSearchQuery({ term, startDate, endDate }));
     await dispatch(fetchedPublications(publications));

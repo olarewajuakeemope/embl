@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Offline } from 'react-detect-offline';
 import SearchForm from './components/SearchForm';
 import Chart from './components/Chart';
 import logo from './resources/img/logo.png';
@@ -15,6 +16,11 @@ const App = ({ publications }) => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1 className="App-title">EMBL Publications Statistics</h1>
+        <Offline>
+          <p className="App-offline">
+            There is no internet connection
+          </p>
+        </Offline>
         <SearchForm
           pClass="App-intro"
         />

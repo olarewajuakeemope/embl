@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Offline } from 'react-detect-offline';
 import { connect } from 'react-redux';
 import SearchForm from './SearchForm';
 import THEME from '../utils/chartTheme';
@@ -144,6 +145,11 @@ class Chart extends Component {
     return (
       <div>
         <SearchForm isNavbar />
+        <Offline>
+          <p className="offline-container">
+            There is no internet connection
+          </p>
+        </Offline>
         <div id="container" />
       </div>
     );

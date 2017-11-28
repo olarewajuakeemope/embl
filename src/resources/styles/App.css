@@ -25,6 +25,28 @@
   top: -10px;
 }
 
+.App-offline {
+  font-family: Dosis;
+  padding: .5em 1em;
+  border-radius: .5em;
+  margin-left: 35%;
+  margin-right: auto;
+  margin-bottom: -1em;
+  width: 30%;
+  background-color: lightcoral; 
+}
+
+.offline-container {
+  font-family: Dosis;
+  padding: .5em 1em;
+  border-radius: .5em;
+  margin: -3.3em auto 1em 30%;
+  width: 40%;
+  text-align: center;
+  color: white;
+  background-color: lightcoral;
+}
+
 .App-header {
   background: linear-gradient(
     rgba(255, 255, 255, 0.75), 
