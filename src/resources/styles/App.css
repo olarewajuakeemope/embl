@@ -66,7 +66,11 @@ li {
 }
 
 .date, .search-text, .submit {
-  margin-right: 1em;
+  margin-left: 1em;
+}
+
+.submit {
+  margin-bottom: 1em;
 }
 
 div.date div {
