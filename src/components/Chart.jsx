@@ -93,9 +93,9 @@ class Chart extends Component {
         text: 'EMBL Publications Statistics',
       },
       subtitle: {
-        text: `${term.toUpperCase()} Search: From
+        text: `${term.toUpperCase()} Search from:
           ${startDate.toDateString()} 
-          To ${endDate.toDateString()}`,
+          to: ${endDate.toDateString()}`,
       },
       xAxis: {
         categories: xAxisCategories,
