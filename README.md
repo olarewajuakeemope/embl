@@ -13,6 +13,7 @@ SCREENSHOT           |  DESCRIPTION
 ![Alt Chart page](/docs/screenshots/6.png?raw=true "Chart page") |  Chart result page with option for new search on top menu bar
 ![Alt Chart info](/docs/screenshots/7.png?raw=true "Chart info") |  Chart bars displaying citations per year and most cited publication details
 ![Alt Chart title](/docs/screenshots/8.png?raw=true "Chart title") |  Chart title with entered search details as sub-title
+![Alt Offline](/docs/screenshots/9.png?raw=true "Offline") |  Application notifying user when in offline state
 
 ## USAGE
 1. Fork this repository to your GitHub account
